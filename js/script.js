@@ -9,6 +9,7 @@ const matchMap = {
   7: 'H',
 };
 
+// The function generates and returns a chessboard of a given size (by default 8x8)
 const createBoard = function createChessboardGivenSize(size = 8, initVal = null) {
   const board = [];
   for (let i = 0; i < size; i += 1) {
@@ -21,6 +22,8 @@ const createBoard = function createChessboardGivenSize(size = 8, initVal = null)
   return board;
 };
 
+// The function accepts the board and the initial position of the figure
+// and returns the board with possible moves
 const markPosition = function identifyingPossiblePositions(board, initPos) {
   const markedBoard = board;
   if (initPos[0] - 1 >= 0 && initPos[1] + 2 <= 7) {
@@ -51,6 +54,8 @@ const markPosition = function identifyingPossiblePositions(board, initPos) {
   return markedBoard;
 };
 
+// Function accepts board with possible moves and returns an array
+// of two-element arrays containing the coordinates of possible moves
 const getMoves = function getAllAvailableMoves(board) {
   const moves = [];
   for (let i = 0; i < board.length; i += 1) {
@@ -64,6 +69,8 @@ const getMoves = function getAllAvailableMoves(board) {
   return moves;
 };
 
+// The function converts moves from the coordinates
+// of the form 0...7x0...7 to the form A...Hx1...8
 const getAlgRepr = function getAlgebraicRepresentationOfMoves(moves) {
   const algebraicMoves = [];
   for (let i = 0; i < moves.length; i += 1) {
@@ -73,6 +80,8 @@ const getAlgRepr = function getAlgebraicRepresentationOfMoves(moves) {
   return algebraicMoves;
 };
 
+// The function takes the position of the figure as `A3` and returns an array
+// of two coordinates as [0, 2] (the origin point shifts to [0, 0])
 const getNumericRepr = function getNumericRepresentationOfSquareCoordinate(squareCoord) {
   const fistCoord = Number(Object.keys(matchMap).find(key => matchMap[key] === squareCoord[0]));
   const secondCoord = Number(squareCoord[1]) - 1;
