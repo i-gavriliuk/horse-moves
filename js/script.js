@@ -74,8 +74,8 @@ const getMoves = function getAllAvailableMoves(board) {
 const getAlgRepr = function getAlgebraicRepresentationOfMoves(moves) {
   const algebraicMoves = [];
   for (let i = 0; i < moves.length; i += 1) {
-    const squares = moves[i];
-    algebraicMoves.push(matchMap[squares[0]] + (squares[1] + 1));
+    const square = moves[i];
+    algebraicMoves.push(matchMap[square[0]] + (square[1] + 1));
   }
   return algebraicMoves;
 };
@@ -88,12 +88,72 @@ const getNumericRepr = function getNumericRepresentationOfSquareCoordinate(squar
   return [fistCoord, secondCoord];
 };
 
-const userInput = 'D4'.toUpperCase();
-const initialPosition = getNumericRepr(userInput);
+const isUserInputValid = function isDataReceivedFromUserValid(position) {
+  return position.length === 2 && /^[A-H][1-8]$/.test(position);
+};
 
-const chessBoard = createBoard();
-const boardWithPosition = markPosition(chessBoard, initialPosition);
-const availableMoves = getMoves(boardWithPosition);
-const algebraicMoves = getAlgRepr(availableMoves);
+const validValuePattern = /^[A-H][1-8]?$/;
+const htmlErrorMsg = 'Некорректный ввод<br>Допустимые значения от A1 до H8';
 
-console.log(algebraicMoves.join(' '));
+$('#init-pos').on({
+  // Listening to input to the field and its processing
+  'input propertychange': () => {
+    const inputVal = $('#init-pos').val().toUpperCase();
+    const $showBtn = $('#show-btn');
+    const $errorField = $('#error');
+    if (!inputVal) {
+      $errorField.text('');
+    } else if (!validValuePattern.test(inputVal)) {
+      $errorField.html(htmlErrorMsg);
+      $showBtn.prop('disabled', true);
+    } else if (inputVal.length === 2) {
+      $showBtn.prop('disabled', false);
+      $errorField.text('');
+    } else {
+      $showBtn.prop('disabled', true);
+      $errorField.text('');
+    }
+  },
+  keyup: (evt) => {
+    // Listening and handling the Enter key pressing
+    if (evt.which === 13 && $('#init-pos').val().length === 2 && $('#show-btn').prop('disabled') === false) {
+      $('#show-btn').click();
+    }
+  },
+});
+
+
+// processing a click on the Show button
+$('#show-btn').on({
+  click: () => {
+    $('#input-block').slideToggle(500, () => {
+      let outputMsg = '';
+      const userInput = $('#init-pos').val().toUpperCase();
+      if (isUserInputValid(userInput)) {
+        const initialPosition = getNumericRepr(userInput);
+        const chessBoard = createBoard();
+        const boardWithPosition = markPosition(chessBoard, initialPosition);
+        const availableMoves = getMoves(boardWithPosition);
+        const algebraicMoves = getAlgRepr(availableMoves).join(' ');
+        outputMsg = algebraicMoves;
+      } else {
+        outputMsg = 'Полученные данные некорректны';
+      }
+      $('#result').text(outputMsg);
+      $('#output-container').slideToggle(100, () => {
+        $('#close-btn').focus();
+      });
+    });
+  },
+});
+
+// processing a click on the Close button
+$('#close-btn').on({
+  click: () => {
+    $('#output-container').slideToggle(500, () => {
+      $('#input-block').slideToggle(100, () => {
+        $('#init-pos').focus();
+      });
+    });
+  },
+});
