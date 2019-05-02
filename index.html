@@ -7,8 +7,23 @@
   <title>Задание 2</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-  
+<body class="page">
+  <div id="input-block" class="user-block input">
+    <label for="init-pos" class="user-block__label">Исходное положение:</label>
+    <input id="init-pos" class="user-block__field" type="text" maxlength="2" autofocus>
+    <div class="user-block__bottom-row">
+      <p id="error" class="user-block__error"></p>
+      <button id="show-btn" class="user-block__btn" disabled>Показать</button>
+    </div>
+  </div>
+  <div id="output-container" class="output">
+    <div id="output-block" class="user-block">
+      <label for="result" class="user-block__label">Возможные варианты ходов:</label>
+      <output id="result" class="user-block__field" type="text"></output>
+      <button id="close-btn" class="user-block__btn user-block__close-btn">Закрыть</button>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.4.0.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
   <script src="js/script.js"></script>
 </body>
 </html>
